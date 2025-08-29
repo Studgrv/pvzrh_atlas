@@ -45,13 +45,13 @@ import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.generated.destinations.EmojiEasterEggScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.padi.newcompose.R
+
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("SetJavaScriptEnabled")
 @Destination<RootGraph>(style = AnimatedNavigation::class)
 @Composable
 fun DetailScreen(
-    url: String,
-    navController: DestinationsNavigator
+    url: String, navController: DestinationsNavigator
 ) {
     val context = LocalContext.current
     var javaScriptContent: String? by remember { mutableStateOf("") }
@@ -104,6 +104,7 @@ fun DetailScreen(
                         loadUrl(url)
                     }
                 })
+
             AnimatedVisibility(
                 visible = isLoading,
                 enter = fadeIn(animationSpec = tween(durationMillis = 100)),

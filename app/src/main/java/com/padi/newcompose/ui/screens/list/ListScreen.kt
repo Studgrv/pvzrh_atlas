@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -17,12 +18,19 @@ import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -85,6 +93,15 @@ fun ListScreen(
         speed = 1f,
     )
 
+    val winterComposition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.lib_reference_winter))
+    val winterProgress by animateLottieCompositionAsState(
+        composition = winterComposition,
+        iterations = LottieConstants.IterateForever,
+        speed = 1f,
+    )
+
+    val searchText by viewModel.searchText.collectAsState()
+
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -100,6 +117,17 @@ fun ListScreen(
                         .blur(radius = 8.dp, edgeTreatment = BlurredEdgeTreatment.Rectangle)
                 )
                 LargeTopAppBar(
+                    navigationIcon = {
+                        IconButton(onClick = {
+                            navigator.popBackStack()
+                        }) {
+                            Icon(
+                                imageVector = Icons.Default.ArrowBack,
+                                contentDescription = null,
+                                tint = titleColor
+                            )
+                        }
+                    },
                     title = {
                         Text(
                             name,
@@ -115,73 +143,117 @@ fun ListScreen(
             }
         }
     ) { innerPadding ->
-        Box(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding),
-            contentAlignment = Alignment.Center
+                .padding(innerPadding)
         ) {
-            AnimatedVisibility(
-                visible = state.isLoading,
-                enter = fadeIn(animationSpec = tween(durationMillis = 100)),
-                exit = fadeOut(animationSpec = tween(durationMillis = 50)),
-            ) {
-                LottieAnimation(
-                    composition = composition,
-                    progress = { progress },
-                )
-            }
+            OutlinedTextField(
+                value = searchText,
+                onValueChange = { newText -> viewModel.onSearchTextChanged(newText) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                label = { Text("搜索") },
+                leadingIcon = {
+                    Icon(
+                        Icons.Default.Search,
+                        contentDescription = "搜索图标"
+                    )
+                },
+                trailingIcon = {
+                    if (searchText.isNotEmpty()) {
+                        IconButton(onClick = { viewModel.onSearchTextChanged("") }) {
+                            Icon(Icons.Default.Clear, contentDescription = "清除文本")
+                        }
+                    }
+                }
+            )
 
-            AnimatedVisibility(
-                visible = state.error != null,
-                enter = fadeIn(animationSpec = tween(durationMillis = 100)),
-                exit = fadeOut(animationSpec = tween(durationMillis = 50)),
+            Column(
+                modifier = Modifier
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.Center
             ) {
-                Text(
-                    text = state.error ?: "Unknown Error",
-                    color = MaterialTheme.colorScheme.error,
-                    modifier = Modifier.padding(16.dp)
-                )
-            }
-
-            // 当列表不为空时，显示列表内容
-            if (state.list.isNotEmpty()) {
-                LazyVerticalStaggeredGrid(
-                    columns = StaggeredGridCells.Fixed(3),
-                    contentPadding = PaddingValues(8.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    modifier = Modifier.fillMaxSize()
+                AnimatedVisibility(
+                    visible = state.isLoading,
+                    enter = fadeIn(animationSpec = tween(durationMillis = 100)),
+                    exit = fadeOut(animationSpec = tween(durationMillis = 50)),
                 ) {
-                    items(state.list) { item ->
-                        Card(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(2.dp),
-                            shape = RoundedCornerShape(8.dp),
-                            colors = CardDefaults.cardColors(
-                                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.8f)
-                            ),
-                            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-                            onClick = {
-                                navigator.navigate(DetailScreenDestination(item.jumpUrl))
-                            }) {
-                            Column(
+                    LottieAnimation(
+                        composition = composition,
+                        progress = { progress },
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+                }
+                AnimatedVisibility(
+                    visible = state.error != null,
+                    enter = fadeIn(animationSpec = tween(durationMillis = 100)),
+                    exit = fadeOut(animationSpec = tween(durationMillis = 50)),
+                ) {
+                    Text(
+                        text = state.error ?: "Unknown Error",
+                        color = MaterialTheme.colorScheme.error,
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .align(Alignment.CenterHorizontally)
+                    )
+                }
+                AnimatedVisibility(
+                    visible = state.list.isNotEmpty(),
+                    enter = fadeIn(animationSpec = tween(durationMillis = 100)),
+                    exit = fadeOut(animationSpec = tween(durationMillis = 50)),
+                ) {
+                    LazyVerticalStaggeredGrid(
+                        columns = StaggeredGridCells.Fixed(3),
+                        contentPadding = PaddingValues(8.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        items(state.list) { item ->
+                            Card(
                                 modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(8.dp),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center
-                            ) {
-                                AsyncImage(
-                                    model = item.imgUrl,
-                                    contentDescription = item.title,
-                                    modifier = Modifier.size(70.dp)
-                                )
-                                HorizontalDivider(modifier = Modifier.padding(4.dp))
-                                Text(item.title)
+                                    .fillMaxWidth()
+                                    .padding(2.dp),
+                                shape = RoundedCornerShape(8.dp),
+                                colors = CardDefaults.cardColors(
+                                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(
+                                        alpha = 0.8f
+                                    )
+                                ),
+                                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+                                onClick = {
+                                    navigator.navigate(DetailScreenDestination(item.jumpUrl))
+                                }) {
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(8.dp),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Center
+                                ) {
+                                    AsyncImage(
+                                        model = item.imgUrl,
+                                        contentDescription = item.title,
+                                        modifier = Modifier.size(70.dp)
+                                    )
+                                    HorizontalDivider(modifier = Modifier.padding(4.dp))
+                                    Text(item.title)
+                                }
                             }
                         }
                     }
+                }
+                AnimatedVisibility(
+                    visible = !state.isLoading && state.error == null && state.list.isEmpty(),
+                    enter = fadeIn(animationSpec = tween(durationMillis = 100)),
+                    exit = fadeOut(animationSpec = tween(durationMillis = 50)),
+                ) {
+                    LottieAnimation(
+                        composition = winterComposition,
+                        progress = { winterProgress },
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
                 }
             }
         }
