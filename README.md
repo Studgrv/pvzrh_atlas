@@ -4,7 +4,7 @@
   <img src="./image/icon.png" alt="项目Logo" width="200"/>
 </p>
 
-这是一个基于 Jetpack Compose 全新开发的**《植物大战僵尸：融合版》**非官方图鉴应用。项目旨在利用现代 Android UI 工具包 Compose，为玩家提供一个方便、美观的图鉴工具，以查看所有植物和僵尸的详细信息。
+这是一个基于 Jetpack Compose 全新开发的 **《植物大战僵尸：融合版》** 非官方图鉴应用。项目旨在利用现代 Android UI 工具包 Compose，为玩家提供一个方便、美观的图鉴工具，以查看所有植物和僵尸的详细信息。
 
 <p align="center">
   <img src="./image/Promotionalimage.jpg" alt="宣传图"/>
