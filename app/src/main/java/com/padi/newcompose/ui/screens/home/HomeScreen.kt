@@ -70,217 +70,56 @@ import com.setruth.themechange.components.MaskBox
 @Destination<RootGraph>(start = true, style = AnimatedNavigation::class)
 @Composable
 fun HomeScreen(
-    navigator: DestinationsNavigator
-) {
-    val viewModel: HomeViewModel = hiltViewModel()
-    val appPrefs = viewModel.appPre
-    val darkTheme by viewModel.darkTheme.collectAsStateWithLifecycle(0)
-    var isAnimating by remember { mutableStateOf(false) }
-    var pendingThemeChange by remember { mutableStateOf<Boolean?>(null) }
-    MaskBox(animTime = 1500L, maskComplete = {
-        pendingThemeChange?.let { newTheme ->
-            viewModel.updateDarkTheme(if (newTheme) 2 else 1)
-            appPrefs.isNight = newTheme
-            pendingThemeChange = null
-        }
-    }, animFinish = {
-        isAnimating = false
-    }) { maskAnimActiveEvent ->
-        MainScaffold(
-            isDarkTheme = when (darkTheme) {
-                1 -> false
-                2 -> true
-                else -> false
-            },
-            isAnimating = isAnimating,
-            homeViewModel = viewModel,
-            onThemeToggle = { animModel, x, y ->
-                if (!isAnimating) {
-                    isAnimating = true
-                    pendingThemeChange = !when (darkTheme) {
-                        1 -> false
-                        2 -> true
-                        else -> false
-                    }
-                    maskAnimActiveEvent(animModel, x, y)
-                }
-            },
-            navController = navigator,
-        )
-    }
-}
-
-data class MenuItem(val name: String, val imageResId: Int)
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun MainScaffold(
-    isDarkTheme: Boolean,
-    isAnimating: Boolean,
-    homeViewModel: HomeViewModel,
-    onThemeToggle: MaskAnimActive,
     navController: DestinationsNavigator
 ) {
-    var showDialog by remember { mutableStateOf(false) }
-    val context = LocalContext.current
-    val uriHandler = LocalUriHandler.current
-    Scaffold(modifier = Modifier.fillMaxSize(), topBar = {
-        key(isDarkTheme) {
-            TopAppBar(title = {
-                Row(horizontalArrangement = Arrangement.Center) {
-                    Image(
-                        painter = painterResource(id = R.drawable.icon),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(24.dp)
-                            .align(Alignment.CenterVertically)
+    val menuItems = listOf(
+        MenuItem("植物图鉴", R.drawable.plant_atlas),
+        MenuItem("僵尸图鉴", R.drawable.zombies_atlas),
+        MenuItem("融合DLC", R.drawable.dlc),
+        MenuItem("二创Mod", R.drawable.mod)
+    )
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        contentPadding = PaddingValues(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier.fillMaxSize()
+    ) {
+        items(menuItems) { item ->
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(1f),
+                shape = RoundedCornerShape(24.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant
+                ),
+                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+                onClick = {
+                    navController.navigate(
+                        ListScreenDestination(
+                            item.name, item.imageResId
+                        )
                     )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(text = "PVZ融合版图鉴")
-                }
-            }, actions = {
-                ThemeToggleButton(
-                    isAnimating = isAnimating, onThemeToggle = onThemeToggle, homeViewModel
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                IconButton(
-                    onClick = {
-                        showDialog = true
-                    },
+                }) {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.Egg,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurface
+                    Image(
+                        painter = painterResource(id = item.imageResId),
+                        contentDescription = item.name,
+                        modifier = Modifier.size(150.dp)
                     )
-                }
-                Spacer(modifier = Modifier.width(8.dp))
-            })
-        }
-        if (showDialog) {
-            AlertDialog(
-                title = {
-                    Text("关于")
-                }, text = {
-                    Column {
-                        ListItem(
-                            modifier = Modifier.clickable {
-
-                            },
-                            colors = ListItemDefaults.colors(containerColor = Color.Transparent),
-                            leadingContent = {
-                                Image(
-                                    painter = painterResource(id = R.drawable.icon),
-                                    contentDescription = null,
-                                    modifier = Modifier
-                                        .size(50.dp)
-                                )
-                            },
-                            headlineContent = {
-                                Text(
-                                    "PVZ融合版图鉴",
-                                    style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold)
-                                )
-                            },
-
-                            supportingContent = {
-                                Text(getAppVersionName(context));
-                            })
-                        HorizontalDivider(modifier = Modifier.fillMaxWidth())
-                        ListItem(
-                            modifier = Modifier.clickable {
-                                uriHandler.openUri("https://github.com/paditianxiu")
-                            },
-                            colors = ListItemDefaults.colors(containerColor = Color.Transparent),
-                            leadingContent = {
-                                Image(
-                                    painter = painterResource(id = R.drawable.paditianxiu),
-                                    contentDescription = null,
-                                    modifier = Modifier
-                                        .size(50.dp)
-                                        .clip(RoundedCornerShape(8.dp))
-                                )
-                            },
-                            headlineContent = {
-                                Text(
-                                    "作者",
-                                    style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold)
-                                )
-                            },
-
-                            supportingContent = {
-                                Text("帕帝天秀");
-                            })
-                    }
-                }, confirmButton = {
-
-                },
-
-                dismissButton = {
-
-                }, onDismissRequest = {
-                    showDialog = false
-                })
-        }
-    }) { innerPadding ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-        ) {
-            val menuItems = listOf(
-                MenuItem("植物图鉴", R.drawable.plant_atlas),
-                MenuItem("僵尸图鉴", R.drawable.zombies_atlas),
-                MenuItem("融合DLC", R.drawable.dlc),
-                MenuItem("二创Mod", R.drawable.mod)
-            )
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                contentPadding = PaddingValues(8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(menuItems) { item ->
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .aspectRatio(1f),
-                        shape = RoundedCornerShape(24.dp),
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceVariant
-                        ),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-                        onClick = {
-                            navController.navigate(
-                                ListScreenDestination(
-                                    item.name, item.imageResId
-                                )
-                            )
-                        }) {
-                        Column(
-                            modifier = Modifier.fillMaxSize(),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center
-                        ) {
-                            Image(
-                                painter = painterResource(id = item.imageResId),
-                                contentDescription = item.name,
-                                modifier = Modifier.size(150.dp)
-                            )
-                        }
-                    }
                 }
             }
         }
     }
 }
 
-private fun getAppVersionName(context: Context): String {
-    return try {
-        val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
-        packageInfo.versionName!!
-    } catch (e: PackageManager.NameNotFoundException) {
-        "Unknown"
-    }
-}
+
+data class MenuItem(val name: String, val imageResId: Int)
+
+
 

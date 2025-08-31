@@ -66,55 +66,40 @@ fun DetailScreen(
         iterations = LottieConstants.IterateForever,
         speed = 1f,
     )
-    Scaffold(
-        topBar = {
-            TopAppBar(navigationIcon = {
-                IconButton(onClick = {
-                    navController.popBackStack()
-                }) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowBack,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurface
-                    )
-                }
-            }, title = { Text("详情页") })
-        }) { paddingValues ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues),
-            contentAlignment = Alignment.Center
-        ) {
-            AndroidView(
-                modifier = Modifier.fillMaxSize(), factory = { context ->
-                    WebView(context).apply {
-                        settings.javaScriptEnabled = true
-                        webChromeClient = object : WebChromeClient() {
-                            override fun onProgressChanged(view: WebView?, newProgress: Int) {
-                                super.onProgressChanged(view, newProgress)
-                                if (newProgress == 100) {
-                                    isLoading = false
-                                    javaScriptContent?.let { js ->
-                                        view?.evaluateJavascript(js, null)
-                                    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        AndroidView(
+            modifier = Modifier.fillMaxSize(), factory = { context ->
+                WebView(context).apply {
+                    settings.javaScriptEnabled = true
+                    webChromeClient = object : WebChromeClient() {
+                        override fun onProgressChanged(view: WebView?, newProgress: Int) {
+                            super.onProgressChanged(view, newProgress)
+                            if (newProgress == 100) {
+                                isLoading = false
+                                javaScriptContent?.let { js ->
+                                    view?.evaluateJavascript(js, null)
                                 }
                             }
                         }
-                        loadUrl(url)
                     }
-                })
+                    loadUrl(url)
+                }
+            })
 
-            AnimatedVisibility(
-                visible = isLoading,
-                enter = fadeIn(animationSpec = tween(durationMillis = 100)),
-                exit = fadeOut(animationSpec = tween(durationMillis = 50)),
-            ) {
-                LottieAnimation(
-                    composition = composition,
-                    progress = { progress },
-                )
-            }
+        AnimatedVisibility(
+            visible = isLoading,
+            enter = fadeIn(animationSpec = tween(durationMillis = 100)),
+            exit = fadeOut(animationSpec = tween(durationMillis = 50)),
+        ) {
+            LottieAnimation(
+                composition = composition,
+                progress = { progress },
+            )
         }
     }
 }

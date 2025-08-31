@@ -14,8 +14,8 @@ android {
         applicationId = "com.padi.newcompose"
         minSdk = 24
         targetSdk = 35
-        versionCode = 20250830
-        versionName = "1.0.1"
+        versionCode = 20250831
+        versionName = "1.0.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.runtime)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -99,6 +100,8 @@ dependencies {
 
 
     implementation(libs.jsoup)
+
+    implementation(libs.androidx.navigation.compose.v293)
 
 
 

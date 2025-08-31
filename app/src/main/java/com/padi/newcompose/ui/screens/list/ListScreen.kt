@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
@@ -67,9 +68,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Destination<RootGraph>(style = AnimatedNavigation::class)
 @Composable
 fun ListScreen(
-    name: String,
-    imageResId: Int,
-    navigator: DestinationsNavigator
+    name: String, imageResId: Int, navigator: DestinationsNavigator
 ) {
     val viewModel: ListViewModel = hiltViewModel()
 
@@ -103,8 +102,7 @@ fun ListScreen(
     val searchText by viewModel.searchText.collectAsState()
 
     Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = {
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection), topBar = {
             Box(
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -118,31 +116,26 @@ fun ListScreen(
                 )
                 LargeTopAppBar(
                     navigationIcon = {
-                        IconButton(onClick = {
-                            navigator.popBackStack()
-                        }) {
-                            Icon(
-                                imageVector = Icons.Default.ArrowBack,
-                                contentDescription = null,
-                                tint = titleColor
-                            )
-                        }
-                    },
-                    title = {
-                        Text(
-                            name,
-                            color = titleColor
+                    IconButton(onClick = {
+                        navigator.popBackStack()
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = null,
+                            tint = titleColor
                         )
-                    },
-                    scrollBehavior = scrollBehavior,
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = Color.Transparent,
-                        scrolledContainerColor = TopAppBarDefaults.topAppBarColors().containerColor
+                    }
+                }, title = {
+                    Text(
+                        name, color = titleColor
                     )
+                }, scrollBehavior = scrollBehavior, colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.Transparent,
+                    scrolledContainerColor = TopAppBarDefaults.topAppBarColors().containerColor
+                )
                 )
             }
-        }
-    ) { innerPadding ->
+        }) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -157,8 +150,7 @@ fun ListScreen(
                 label = { Text("搜索") },
                 leadingIcon = {
                     Icon(
-                        Icons.Default.Search,
-                        contentDescription = "搜索图标"
+                        Icons.Default.Search, contentDescription = "搜索图标"
                     )
                 },
                 trailingIcon = {
@@ -167,13 +159,10 @@ fun ListScreen(
                             Icon(Icons.Default.Clear, contentDescription = "清除文本")
                         }
                     }
-                }
-            )
+                })
 
             Column(
-                modifier = Modifier
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.Center
+                modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center
             ) {
                 AnimatedVisibility(
                     visible = state.isLoading,

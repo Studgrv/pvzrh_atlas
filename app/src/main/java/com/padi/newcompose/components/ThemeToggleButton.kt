@@ -3,6 +3,8 @@ package com.padi.newcompose.components
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.LightMode
+import androidx.compose.material.icons.outlined.DarkMode
+import androidx.compose.material.icons.outlined.LightMode
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -53,7 +55,7 @@ fun ThemeToggleButton(
         }
     ) {
         Icon(
-            imageVector = if (isDarkTheme) Icons.Default.DarkMode else Icons.Default.LightMode,
+            imageVector = if (isDarkTheme) Icons.Outlined.DarkMode else Icons.Outlined.LightMode,
             contentDescription = if (isDarkTheme) "切换到亮色模式" else "切换到暗色模式",
             tint = MaterialTheme.colorScheme.onSurface
         )
