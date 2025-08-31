@@ -164,7 +164,6 @@ class MainActivity : ComponentActivity() {
 
                             when (currentRoute) {
                                 ListScreenDestination.route -> {
-
                                 }
 
                                 DetailScreenDestination.route -> {

@@ -4,11 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
@@ -16,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -31,7 +28,6 @@ import com.padi.newcompose.ui.anim.AnimatedNavigation
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.generated.destinations.DetailScreenDestination
-import com.ramcosta.composedestinations.generated.destinations.DetailScreenDestination.invoke
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @Destination<RootGraph>(style = AnimatedNavigation::class)
@@ -44,9 +40,9 @@ fun SortScreen(navController: DestinationsNavigator) {
         viewModel.getAllData()
     }
 
-    var selectedTabIndex by remember { mutableIntStateOf(0) }
+    var selectedTabIndex by rememberSaveable { mutableIntStateOf(0) }
     val options = listOf("植物", "僵尸")
-    var selectedOption by remember { mutableStateOf(options[0]) }
+    var selectedOption by rememberSaveable { mutableStateOf(options[0]) }
 
     val tabs = when (selectedOption) {
         "植物" -> state.plantTabList
